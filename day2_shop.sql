@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict wWC53GesWT3QYAKuHE43NgR2eXJdNdR1QT5iIkJCmWxrVbpLSHjHhVujZGvtccx
+\restrict C7mGyhzlfSkWnEnnv8Xv8Ew0QdSQgf5sKBS6OG6aAwM78elEiq14nrWWYGCumDD
 
 -- Dumped from database version 15.19 (Homebrew)
 -- Dumped by pg_dump version 15.19 (Homebrew)
@@ -23,7 +23,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: products; Type: TABLE; Schema: public; Owner: -
+-- Name: products; Type: TABLE; Schema: public; Owner: shop_user
 --
 
 CREATE TABLE public.products (
@@ -36,8 +36,10 @@ CREATE TABLE public.products (
 );
 
 
+ALTER TABLE public.products OWNER TO shop_user;
+
 --
--- Name: products_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: products_id_seq; Type: SEQUENCE; Schema: public; Owner: shop_user
 --
 
 CREATE SEQUENCE public.products_id_seq
@@ -49,44 +51,47 @@ CREATE SEQUENCE public.products_id_seq
     CACHE 1;
 
 
+ALTER TABLE public.products_id_seq OWNER TO shop_user;
+
 --
--- Name: products_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: products_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: shop_user
 --
 
 ALTER SEQUENCE public.products_id_seq OWNED BY public.products.id;
 
 
 --
--- Name: products id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: products id; Type: DEFAULT; Schema: public; Owner: shop_user
 --
 
 ALTER TABLE ONLY public.products ALTER COLUMN id SET DEFAULT nextval('public.products_id_seq'::regclass);
 
 
 --
--- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: shop_user
 --
 
 COPY public.products (id, name, price, in_stock, created_at) FROM stdin;
 1	Ноутбук	75000.00	t	2026-10-13 18:45:28.367904
 2	Мышь	1200.50	t	2026-10-13 18:45:28.367904
-3	Клавиатура	3500.00	f	2026-10-13 18:45:28.367904
 4	Монитор	18900.99	t	2026-10-13 18:45:28.367904
-5	Наушники	4200.00	f	2026-10-13 18:45:28.367904
 6	lunacy	7000.00	t	2026-10-13 18:47:27.621403
-8	test	100.00	t	2026-10-13 18:49:16.840505
+9	a	777.00	t	2026-10-14 16:51:49.656167
+3	Клавиатура	3850.00	f	2026-10-13 18:45:28.367904
+5	Наушники	4620.00	f	2026-10-13 18:45:28.367904
+10	b	732.60	f	2026-10-14 16:51:49.656167
 \.
 
 
 --
--- Name: products_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: products_id_seq; Type: SEQUENCE SET; Schema: public; Owner: shop_user
 --
 
-SELECT pg_catalog.setval('public.products_id_seq', 8, true);
+SELECT pg_catalog.setval('public.products_id_seq', 10, true);
 
 
 --
--- Name: products products_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: products products_pkey; Type: CONSTRAINT; Schema: public; Owner: shop_user
 --
 
 ALTER TABLE ONLY public.products
@@ -97,5 +102,5 @@ ALTER TABLE ONLY public.products
 -- PostgreSQL database dump complete
 --
 
-\unrestrict wWC53GesWT3QYAKuHE43NgR2eXJdNdR1QT5iIkJCmWxrVbpLSHjHhVujZGvtccx
+\unrestrict C7mGyhzlfSkWnEnnv8Xv8Ew0QdSQgf5sKBS6OG6aAwM78elEiq14nrWWYGCumDD
 

@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict rSeMBIt0uJyLkkRXm9C2IIAN36vxSFi87CYAJLDxPeAxNcgVGeNPEPMzruZDQac
+\restrict 6Xfb8SnViHHHZxab5MNIZtPAOaiIu3yHJzLnrLyx4ARAVwlStYGF4JqMI6gLIYH
 
 -- Dumped from database version 15.19 (Homebrew)
 -- Dumped by pg_dump version 15.19 (Homebrew)
@@ -23,7 +23,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: users; Type: TABLE; Schema: public; Owner: -
+-- Name: users; Type: TABLE; Schema: public; Owner: zaharfatkullov
 --
 
 CREATE TABLE public.users (
@@ -33,8 +33,10 @@ CREATE TABLE public.users (
 );
 
 
+ALTER TABLE public.users OWNER TO zaharfatkullov;
+
 --
--- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: zaharfatkullov
 --
 
 CREATE SEQUENCE public.users_id_seq
@@ -46,40 +48,42 @@ CREATE SEQUENCE public.users_id_seq
     CACHE 1;
 
 
+ALTER TABLE public.users_id_seq OWNER TO zaharfatkullov;
+
 --
--- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: zaharfatkullov
 --
 
 ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
--- Name: users id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: zaharfatkullov
 --
 
 ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
 
 
 --
--- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: zaharfatkullov
 --
 
 COPY public.users (id, name, email) FROM stdin;
 1	Аня	anya@example.com
 4	Борис	boris@example.com
-5	Vera	vera@example.com
+5	Вера	vera@example.com
 \.
 
 
 --
--- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: zaharfatkullov
 --
 
 SELECT pg_catalog.setval('public.users_id_seq', 5, true);
 
 
 --
--- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: zaharfatkullov
 --
 
 ALTER TABLE ONLY public.users
@@ -87,7 +91,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: zaharfatkullov
 --
 
 ALTER TABLE ONLY public.users
@@ -98,5 +102,5 @@ ALTER TABLE ONLY public.users
 -- PostgreSQL database dump complete
 --
 
-\unrestrict rSeMBIt0uJyLkkRXm9C2IIAN36vxSFi87CYAJLDxPeAxNcgVGeNPEPMzruZDQac
+\unrestrict 6Xfb8SnViHHHZxab5MNIZtPAOaiIu3yHJzLnrLyx4ARAVwlStYGF4JqMI6gLIYH
 
