@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict 6Xfb8SnViHHHZxab5MNIZtPAOaiIu3yHJzLnrLyx4ARAVwlStYGF4JqMI6gLIYH
+\restrict eaij3c0jbSLAXXh93DkFfPhj4m5rsmUOBzizj8fGqmuCpwq3eTZIrytz2nmWg2S
 
 -- Dumped from database version 15.19 (Homebrew)
 -- Dumped by pg_dump version 15.19 (Homebrew)
@@ -21,6 +21,43 @@ SET row_security = off;
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
+
+--
+-- Name: orders; Type: TABLE; Schema: public; Owner: zaharfatkullov
+--
+
+CREATE TABLE public.orders (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    amount numeric(10,2) NOT NULL,
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    CONSTRAINT orders_amount_check CHECK ((amount > (0)::numeric))
+);
+
+
+ALTER TABLE public.orders OWNER TO zaharfatkullov;
+
+--
+-- Name: orders_id_seq; Type: SEQUENCE; Schema: public; Owner: zaharfatkullov
+--
+
+CREATE SEQUENCE public.orders_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.orders_id_seq OWNER TO zaharfatkullov;
+
+--
+-- Name: orders_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: zaharfatkullov
+--
+
+ALTER SEQUENCE public.orders_id_seq OWNED BY public.orders.id;
+
 
 --
 -- Name: users; Type: TABLE; Schema: public; Owner: zaharfatkullov
@@ -58,10 +95,28 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
+-- Name: orders id; Type: DEFAULT; Schema: public; Owner: zaharfatkullov
+--
+
+ALTER TABLE ONLY public.orders ALTER COLUMN id SET DEFAULT nextval('public.orders_id_seq'::regclass);
+
+
+--
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: zaharfatkullov
 --
 
 ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+
+
+--
+-- Data for Name: orders; Type: TABLE DATA; Schema: public; Owner: zaharfatkullov
+--
+
+COPY public.orders (id, user_id, amount, created_at) FROM stdin;
+1	1	1500.00	2026-10-15 12:48:49.196419
+2	1	320.50	2026-10-15 12:48:49.196419
+3	4	2990.00	2026-10-15 12:48:49.196419
+\.
 
 
 --
@@ -76,10 +131,25 @@ COPY public.users (id, name, email) FROM stdin;
 
 
 --
+-- Name: orders_id_seq; Type: SEQUENCE SET; Schema: public; Owner: zaharfatkullov
+--
+
+SELECT pg_catalog.setval('public.orders_id_seq', 3, true);
+
+
+--
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: zaharfatkullov
 --
 
 SELECT pg_catalog.setval('public.users_id_seq', 5, true);
+
+
+--
+-- Name: orders orders_pkey; Type: CONSTRAINT; Schema: public; Owner: zaharfatkullov
+--
+
+ALTER TABLE ONLY public.orders
+    ADD CONSTRAINT orders_pkey PRIMARY KEY (id);
 
 
 --
@@ -99,8 +169,16 @@ ALTER TABLE ONLY public.users
 
 
 --
+-- Name: orders orders_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: zaharfatkullov
+--
+
+ALTER TABLE ONLY public.orders
+    ADD CONSTRAINT orders_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
-\unrestrict 6Xfb8SnViHHHZxab5MNIZtPAOaiIu3yHJzLnrLyx4ARAVwlStYGF4JqMI6gLIYH
+\unrestrict eaij3c0jbSLAXXh93DkFfPhj4m5rsmUOBzizj8fGqmuCpwq3eTZIrytz2nmWg2S
 
