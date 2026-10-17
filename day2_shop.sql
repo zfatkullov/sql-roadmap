@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict Ywz5s1x1qNuuFDF3HnBt8RC2P5Z5woweROwfU9MKfULMaghNdxDk7n16GvCVe01
+\restrict eyJFeJF16zTvkO2mhcqAb2gGuJDqclHvDhadXF7GQ0AwPXpIkl2ocqvotciA4kU
 
 -- Dumped from database version 15.19 (Homebrew)
 -- Dumped by pg_dump version 15.19 (Homebrew)
@@ -23,6 +23,40 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: customers; Type: TABLE; Schema: public; Owner: shop_user
+--
+
+CREATE TABLE public.customers (
+    id integer NOT NULL,
+    name text NOT NULL
+);
+
+
+ALTER TABLE public.customers OWNER TO shop_user;
+
+--
+-- Name: customers_id_seq; Type: SEQUENCE; Schema: public; Owner: shop_user
+--
+
+CREATE SEQUENCE public.customers_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.customers_id_seq OWNER TO shop_user;
+
+--
+-- Name: customers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: shop_user
+--
+
+ALTER SEQUENCE public.customers_id_seq OWNED BY public.customers.id;
+
+
+--
 -- Name: order_items; Type: TABLE; Schema: public; Owner: shop_user
 --
 
@@ -31,6 +65,8 @@ CREATE TABLE public.order_items (
     order_id integer NOT NULL,
     product_id integer NOT NULL,
     quantity integer NOT NULL,
+    unit_price numeric(10,2) NOT NULL,
+    CONSTRAINT chk_unit_price CHECK ((unit_price > (0)::numeric)),
     CONSTRAINT order_items_quantity_check CHECK ((quantity > 0))
 );
 
@@ -103,8 +139,8 @@ ALTER SEQUENCE public.products_id_seq OWNED BY public.products.id;
 
 CREATE TABLE public.shop_orders (
     id integer NOT NULL,
-    customer text NOT NULL,
-    created_at timestamp without time zone DEFAULT now() NOT NULL
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    customer_id integer NOT NULL
 );
 
 
@@ -133,6 +169,13 @@ ALTER SEQUENCE public.shop_orders_id_seq OWNED BY public.shop_orders.id;
 
 
 --
+-- Name: customers id; Type: DEFAULT; Schema: public; Owner: shop_user
+--
+
+ALTER TABLE ONLY public.customers ALTER COLUMN id SET DEFAULT nextval('public.customers_id_seq'::regclass);
+
+
+--
 -- Name: order_items id; Type: DEFAULT; Schema: public; Owner: shop_user
 --
 
@@ -154,15 +197,25 @@ ALTER TABLE ONLY public.shop_orders ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
+-- Data for Name: customers; Type: TABLE DATA; Schema: public; Owner: shop_user
+--
+
+COPY public.customers (id, name) FROM stdin;
+1	Борис
+2	Аня
+\.
+
+
+--
 -- Data for Name: order_items; Type: TABLE DATA; Schema: public; Owner: shop_user
 --
 
-COPY public.order_items (id, order_id, product_id, quantity) FROM stdin;
-1	1	1	2
-2	1	2	1
-3	1	3	1
-4	2	1	1
-5	2	5	3
+COPY public.order_items (id, order_id, product_id, quantity, unit_price) FROM stdin;
+1	1	1	2	75000.00
+2	1	2	1	1200.50
+3	1	3	1	3850.00
+4	2	1	1	75000.00
+5	2	5	3	4620.00
 \.
 
 
@@ -171,7 +224,6 @@ COPY public.order_items (id, order_id, product_id, quantity) FROM stdin;
 --
 
 COPY public.products (id, name, price, in_stock, created_at) FROM stdin;
-1	Ноутбук	75000.00	t	2026-10-13 18:45:28.367904
 2	Мышь	1200.50	t	2026-10-13 18:45:28.367904
 4	Монитор	18900.99	t	2026-10-13 18:45:28.367904
 6	lunacy	7000.00	t	2026-10-13 18:47:27.621403
@@ -179,6 +231,7 @@ COPY public.products (id, name, price, in_stock, created_at) FROM stdin;
 3	Клавиатура	3850.00	f	2026-10-13 18:45:28.367904
 5	Наушники	4620.00	f	2026-10-13 18:45:28.367904
 10	b	732.60	f	2026-10-14 16:51:49.656167
+1	Ноутбук	75000.00	t	2026-10-13 18:45:28.367904
 \.
 
 
@@ -186,10 +239,17 @@ COPY public.products (id, name, price, in_stock, created_at) FROM stdin;
 -- Data for Name: shop_orders; Type: TABLE DATA; Schema: public; Owner: shop_user
 --
 
-COPY public.shop_orders (id, customer, created_at) FROM stdin;
-1	Аня	2026-10-15 13:08:50.161957
-2	Борис	2026-10-15 13:08:50.161957
+COPY public.shop_orders (id, created_at, customer_id) FROM stdin;
+1	2026-10-15 13:08:50.161957	2
+2	2026-10-15 13:08:50.161957	1
 \.
+
+
+--
+-- Name: customers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: shop_user
+--
+
+SELECT pg_catalog.setval('public.customers_id_seq', 2, true);
 
 
 --
@@ -210,7 +270,15 @@ SELECT pg_catalog.setval('public.products_id_seq', 10, true);
 -- Name: shop_orders_id_seq; Type: SEQUENCE SET; Schema: public; Owner: shop_user
 --
 
-SELECT pg_catalog.setval('public.shop_orders_id_seq', 2, true);
+SELECT pg_catalog.setval('public.shop_orders_id_seq', 4, true);
+
+
+--
+-- Name: customers customers_pkey; Type: CONSTRAINT; Schema: public; Owner: shop_user
+--
+
+ALTER TABLE ONLY public.customers
+    ADD CONSTRAINT customers_pkey PRIMARY KEY (id);
 
 
 --
@@ -238,6 +306,14 @@ ALTER TABLE ONLY public.shop_orders
 
 
 --
+-- Name: shop_orders fk_shop_orders_customer; Type: FK CONSTRAINT; Schema: public; Owner: shop_user
+--
+
+ALTER TABLE ONLY public.shop_orders
+    ADD CONSTRAINT fk_shop_orders_customer FOREIGN KEY (customer_id) REFERENCES public.customers(id);
+
+
+--
 -- Name: order_items order_items_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: shop_user
 --
 
@@ -257,5 +333,5 @@ ALTER TABLE ONLY public.order_items
 -- PostgreSQL database dump complete
 --
 
-\unrestrict Ywz5s1x1qNuuFDF3HnBt8RC2P5Z5woweROwfU9MKfULMaghNdxDk7n16GvCVe01
+\unrestrict eyJFeJF16zTvkO2mhcqAb2gGuJDqclHvDhadXF7GQ0AwPXpIkl2ocqvotciA4kU
 
